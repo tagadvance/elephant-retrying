@@ -46,7 +46,7 @@ final class BlockStrategies
 	}
 }
 
-class SleepStrategy implements BlockStrategy
+final class SleepStrategy implements BlockStrategy
 {
 	const MICROSECONDS_PER_SECOND = 1000000.0;
 
