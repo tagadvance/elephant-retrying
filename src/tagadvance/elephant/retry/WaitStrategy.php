@@ -29,8 +29,6 @@ interface WaitStrategy
 	 *
 	 * @param Attempt failedAttempt the previous failed `Attempt`
 	 * @return float the sleep time before next attempt
-	 *
-	 * @see Attempt
 	 */
 	public function computeSleepTime(Attempt $failedAttempt): float;
 }
