@@ -3,8 +3,7 @@
     "description": "This is a port of the guava-retrying module to allow for the creation of configurable retrying strategies for an arbitrary function call, such as something that talks to a remote service with flaky uptime.",
     "type": "library",
     "require-dev": {
-        "phpunit/phpunit": "^9.0",
-        "hamcrest/hamcrest-php": "^2.0"
+        "phpunit/phpunit": "^9.0"
     },
     "license": "Apache License 2.0",
     "authors": [
