@@ -24,7 +24,7 @@ namespace tagadvance\elephant\retry;
  *
  * @see BlockStrategy
  */
-class BlockStrategies
+final class BlockStrategies
 {
 	private function __construct()
 	{
