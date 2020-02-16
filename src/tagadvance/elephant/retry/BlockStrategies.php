@@ -17,6 +17,8 @@
  * limitations under the License.
  */
 
+declare(strict_types=1);
+
 namespace tagadvance\elephant\retry;
 
 /**
@@ -52,7 +54,7 @@ final class SleepStrategy implements BlockStrategy
 
 	public function block(float $sleepSeconds): void
 	{
-		$microseconds = $sleepSeconds * self::MICROSECONDS_PER_SECOND;
+		$microseconds = intval($sleepSeconds * self::MICROSECONDS_PER_SECOND);
 		usleep($microseconds);
 	}
 }
