@@ -26,8 +26,6 @@ use Respect\Validation\Validator;
  *
  * @see Retryer
  */
-public
-
 class RetryerBuilder
 {
 	private StopStrategy $stopStrategy;
@@ -75,8 +73,7 @@ class RetryerBuilder
 	 */
 	public function withWaitStrategy(WaitStrategy $waitStrategy): self
 	{
-		// TODO; cover with unit test
-		if ($this->waitStrategy !== null) {
+		if (isset($this->waitStrategy)) {
 			throw new IllegalStateException('a wait strategy has already been set');
 		}
 
@@ -94,8 +91,7 @@ class RetryerBuilder
 	 */
 	public function withStopStrategy(StopStrategy $stopStrategy): self
 	{
-		// TODO; cover with unit test
-		if ($this->stopStrategy !== null) {
+		if (isset($this->stopStrategy)) {
 			throw new IllegalStateException('a stop strategy has already been set');
 		}
 
@@ -114,8 +110,7 @@ class RetryerBuilder
 	 */
 	public function withBlockStrategy(BlockStrategy $blockStrategy): self
 	{
-		// TODO; cover with unit test
-		if ($this->blockStrategy !== null) {
+		if (isset($this->blockStrategy)) {
 			throw new IllegalStateException('a block strategy has already been set');
 		}
 
@@ -133,14 +128,10 @@ class RetryerBuilder
 	 */
 	public function retryIfExceptionOfType(string $exceptionClass): self
 	{
-		// TODO: cover with spec
-		Validator::callback('class_exists')->setName('$exceptionClass')->check($exceptionClass);
-		// TODO: ensure of type \Throwable?
+		$this->rejectionPredicate = self::orPredicate($this->rejectionPredicate, self::exceptionClassPredicate($exceptionClass));
 
-		$this->rejectionPredicate = Predicates .or($this->rejectionPredicate, new ExceptionClassPredicate(exceptionClass));
-
-        return $this;
-    }
+		return $this;
+	}
 
 	/**
 	 * Configures the retryer to retry if an exception satisfying the given predicate is thrown by the call.
@@ -148,12 +139,12 @@ class RetryerBuilder
 	 * @param callable $exceptionPredicate the predicate which causes a retry if satisfied
 	 * @return self <code>this</code>
 	 */
-	public function retryIfException(callable exceptionPredicate): self
+	public function retryIfException(callable $exceptionPredicate): self
 	{
-		$this->rejectionPredicate = Predicates .or($this->rejectionPredicate, new ExceptionPredicate(exceptionPredicate));
+		$this->rejectionPredicate = self::orPredicate($this->rejectionPredicate, self::exceptionPredicate($exceptionPredicate));
 
-        return $this;
-    }
+		return $this;
+	}
 
 	/**
 	 * Configures the retryer to retry if the result satisfies the given predicate.
@@ -164,10 +155,10 @@ class RetryerBuilder
 	 */
 	public function retryIfResult(callable $resultPredicate): self
 	{
-		$this->rejectionPredicate = Predicates .or($this->rejectionPredicate, new ResultPredicate(resultPredicate));
+		$this->rejectionPredicate = self::orPredicate($this->rejectionPredicate, self::resultPredicate($resultPredicate));
 
-        return $this;
-    }
+		return $this;
+	}
 
 	/**
 	 * Builds the retryer.
@@ -177,10 +168,23 @@ class RetryerBuilder
 	public function build(): Retryer
 	{
 		$theStopStrategy = $this->stopStrategy == null ? StopStrategies::neverStop() : $this->stopStrategy;
-		$theWaitStrategy = $this->waitStrategy == null ? WaitStrategies::noWait() : $this->.waitStrategy;
+		$theWaitStrategy = $this->waitStrategy == null ? WaitStrategies::noWait() : $this->waitStrategy;
 		$theBlockStrategy = $this->blockStrategy == null ? BlockStrategies::sleepStrategy() : $this->blockStrategy;
 
 		return new Retryer($theStopStrategy, $theWaitStrategy, $theBlockStrategy, $this->rejectionPredicate, ...$this->listeners);
+	}
+
+	private static function orPredicate(callable ...$callables): callable
+	{
+		return function (...$args) use ($callables) {
+			foreach ($callables as $callable) {
+				if ($callable(...$args)) {
+					return true;
+				}
+			}
+
+			return false;
+		};
 	}
 
 	private static function exceptionClassPredicate(string $exceptionClass): callable
