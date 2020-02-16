@@ -12,7 +12,7 @@ before_script:
   - mkdir -p build/logs
 
 script:
-  - php vendor/bin/phpunit --bootstrap vendor/autoload.php --coverage-clover build/logs/clover.xml tests
+  - make test-coverage
 
 after_success:
   - travis_retry php vendor/bin/coveralls -v
