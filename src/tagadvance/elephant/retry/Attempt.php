@@ -71,9 +71,9 @@ interface Attempt
 	public function getAttemptNumber(): int;
 
 	/**
-	 * The delay since the start of the first attempt, in milliseconds.
+	 * The delay since the start of the first attempt, in seconds.
 	 *
-	 * @return the delay since the start of the first attempt, in milliseconds
+	 * @return float the delay since the start of the first attempt, in seconds
 	 */
-	public function getDelaySinceFirstAttempt(): int;
+	public function getDelaySinceFirstAttempt(): float;
 }
