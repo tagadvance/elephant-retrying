@@ -7,7 +7,7 @@
         "mockery/mockery": "dev-master",
         "codeclimate/php-test-reporter": "dev-master"
     },
-    "license": "Apache License 2.0",
+    "license": "Apache-2.0",
     "authors": [
         {
             "name": "Tag",
