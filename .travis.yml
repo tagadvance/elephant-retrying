@@ -1,0 +1,18 @@
+language: php
+
+php:
+  - '7.4'
+
+install:
+  # vendor
+  - composer install --no-interaction
+
+before_script:
+  # php-coveralls
+  - mkdir -p build/logs
+
+script:
+  - php vendor/bin/phpunit --bootstrap vendor/autoload.php --coverage-clover build/logs/clover.xml tests
+
+after_success:
+  - travis_retry php vendor/bin/coveralls -v
