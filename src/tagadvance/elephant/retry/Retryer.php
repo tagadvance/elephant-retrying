@@ -81,7 +81,7 @@ final class Retryer
 
 		for ($attemptNumber = 1; ; $attemptNumber++) {
 			try {
-				$result = attemptTimeLimiter . call($callable);
+				$result = $callable();
 				$attempt = new ResultAttempt($result, $attemptNumber, microtime(true) - $startTime);
 			} catch (\Throwable $t) {
 				$attempt = new ExceptionAttempt($t, $attemptNumber, microtime(true) - $startTime);
@@ -174,7 +174,7 @@ final class ExceptionAttempt implements Attempt
 
 	public function __construct(\Throwable $cause, int $attemptNumber, float $delaySinceFirstAttempt)
 	{
-		$this->e = new ExecutionException($cause);
+		$this->e = new ExecutionException('', 0, $cause);
 		$this->attemptNumber = $attemptNumber;
 		$this->delaySinceFirstAttempt = $delaySinceFirstAttempt;
 	}

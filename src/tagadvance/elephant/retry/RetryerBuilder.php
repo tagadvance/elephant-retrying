@@ -167,9 +167,9 @@ class RetryerBuilder
 	 */
 	public function build(): Retryer
 	{
-		$theStopStrategy = $this->stopStrategy == null ? StopStrategies::neverStop() : $this->stopStrategy;
-		$theWaitStrategy = $this->waitStrategy == null ? WaitStrategies::noWait() : $this->waitStrategy;
-		$theBlockStrategy = $this->blockStrategy == null ? BlockStrategies::sleepStrategy() : $this->blockStrategy;
+		$theStopStrategy = isset($this->stopStrategy) ? $this->stopStrategy : StopStrategies::neverStop();
+		$theWaitStrategy = isset($this->waitStrategy) ? $this->waitStrategy : WaitStrategies::noWait();
+		$theBlockStrategy = isset($this->blockStrategy) ? $this->blockStrategy : BlockStrategies::sleepStrategy();
 
 		return new Retryer($theStopStrategy, $theWaitStrategy, $theBlockStrategy, $this->rejectionPredicate, ...$this->listeners);
 	}
