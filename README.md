@@ -22,7 +22,7 @@ $retryer = RetryerBuilder::newBuilder()
 	->withStopStrategy(StopStrategies . stopAfterAttempt(3))
 	->build();
 try {
-	$retryer . call(fn() => true); // do something useful here
+	$retryer->call(fn() => true); // do something useful here
 } catch (RetryException $e) {
 	print $e->getTraceAsString();
 } catch (ExecutionException $e) {
