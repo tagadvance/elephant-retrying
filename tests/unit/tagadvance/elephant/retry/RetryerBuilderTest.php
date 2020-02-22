@@ -9,6 +9,15 @@ class RetryerBuilderTest extends TestCase
 	function testNewBuilder()
 	{
 		RetryerBuilder::newBuilder();
+
+		$this->assertTrue(true);
+	}
+
+	function testWithRetryListener()
+	{
+		$listener = \Mockery::mock(RetryListener::class);
+		RetryerBuilder::newBuilder()->withRetryListener($listener);
+
 		$this->assertTrue(true);
 	}
 
@@ -37,5 +46,34 @@ class RetryerBuilderTest extends TestCase
 
 		$strategy = \Mockery::mock(BlockStrategy::class);
 		RetryerBuilder::newBuilder()->withBlockStrategy($strategy)->withBlockStrategy($strategy);
+	}
+
+	function testRetryIfExceptionOfTypeValidation()
+	{
+		$this->expectException(\InvalidArgumentException::class);
+		$this->expectExceptionMessage('$exceptionClass must be valid');
+
+		RetryerBuilder::newBuilder()->retryIfExceptionOfType('Foo');
+	}
+
+	function testRetryIfExceptionOfType()
+	{
+		RetryerBuilder::newBuilder()->retryIfExceptionOfType(\Throwable::class);
+
+		$this->assertTrue(true);
+	}
+
+	function testRetryIfException()
+	{
+		RetryerBuilder::newBuilder()->retryIfException(fn(\Throwable $t) => true);
+
+		$this->assertTrue(true);
+	}
+
+	function testRetryIfResult()
+	{
+		RetryerBuilder::newBuilder()->retryIfResult(fn($result) => true);
+
+		$this->assertTrue(true);
 	}
 }

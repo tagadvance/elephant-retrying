@@ -305,8 +305,7 @@ final class ExceptionWaitStrategy implements WaitStrategy
 
 	public function __construct(string $exceptionClass, callable $function)
 	{
-		Validator::callback('class_exists')->setName('$exceptionClass')->check($exceptionClass);
-		// TODO: ensure of type \Throwable?
+		Validator::callback([Utilities::class, 'isThrowable'])->setName('$exceptionClass')->check($exceptionClass);
 
 		$this->exceptionClass = $exceptionClass;
 		$this->function = $function;

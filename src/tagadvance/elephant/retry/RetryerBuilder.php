@@ -191,9 +191,7 @@ class RetryerBuilder
 
 	private static function exceptionClassPredicate(string $exceptionClass): callable
 	{
-		// TODO: cover with spec
-		Validator::callback('class_exists')->setName('$exceptionClass')->check($exceptionClass);
-		// TODO: ensure of type \Throwable?
+		Validator::callback([Utilities::class, 'isThrowable'])->setName('$exceptionClass')->check($exceptionClass);
 
 		return function (Attempt $attempt) use ($exceptionClass) {
 			if (!$attempt->hasException()) {

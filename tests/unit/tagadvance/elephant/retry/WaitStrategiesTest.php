@@ -191,7 +191,7 @@ class WaitStrategiesTest extends TestCase
 		}
 	}
 
-	function testExceptionValidation()
+	function testExceptionWaitValidation()
 	{
 		$this->expectException(\InvalidArgumentException::class);
 		$this->expectExceptionMessage('$exceptionClass must be valid');
