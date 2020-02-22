@@ -40,7 +40,7 @@ final class StopStrategies
 	 *
 	 * @return NeverStopStrategy a stop strategy which never stops
 	 */
-	public static function neverStop(): NeverStopStrategy
+	public static function neverStop(): StopStrategy
 	{
 		static $neverStop = null;
 		if ($neverStop === null) {
@@ -56,7 +56,7 @@ final class StopStrategies
 	 * @param int $attemptNumber the number of failed attempts before stopping
 	 * @return StopAfterAttemptStrategy a stop strategy which stops after `$attemptNumber` attempts
 	 */
-	public static function stopAfterAttempt(int $attemptNumber): StopAfterAttemptStrategy
+	public static function stopAfterAttempt(int $attemptNumber): StopStrategy
 	{
 		return new StopAfterAttemptStrategy($attemptNumber);
 	}
@@ -69,7 +69,7 @@ final class StopStrategies
 	 * @param float $delayInSeconds the delay, starting from first attempt
 	 * @return StopAfterDelayStrategy a stop strategy which stops after `$delayInSeconds`
 	 */
-	public static function stopAfterDelay(float $delayInSeconds): StopAfterDelayStrategy
+	public static function stopAfterDelay(float $delayInSeconds): StopStrategy
 	{
 		return new StopAfterDelayStrategy($delayInSeconds);
 	}

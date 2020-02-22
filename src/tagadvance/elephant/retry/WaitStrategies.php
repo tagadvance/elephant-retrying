@@ -108,9 +108,9 @@ final class WaitStrategies
 
 	/**
 	 * Returns a strategy which sleeps for an increasing amount of time after the first failed attempt,
-	 * and in Fibonacci increments after each failed attempt up to the {@code maximumTime}.
+	 * and in Fibonacci increments after each failed attempt up to the `$maximumTimeSeconds`.
 	 * The wait time between the retries can be controlled by the multiplier.
-	 * nextWaitTime = fibonacciIncrement * {@code multiplier}.
+	 * nextWaitTime = fibonacciIncrement * `$multiplier`.
 	 *
 	 * @param float $multiplier multiply the wait time calculated by this
 	 * @param float $maximumTimeSeconds the maximum time to sleep

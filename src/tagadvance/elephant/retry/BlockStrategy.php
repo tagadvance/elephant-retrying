@@ -34,8 +34,6 @@ interface BlockStrategy
 	 * configured `WaitStrategy`. Caution is advised when generating your own implementations.
 	 *
 	 * @param float $sleepSeconds the computed sleep duration in seconds
-	 *
-	 * @see WaitStrategy
 	 */
 	public function block(float $sleepSeconds): void;
 }
