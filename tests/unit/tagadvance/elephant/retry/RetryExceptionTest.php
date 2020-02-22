@@ -28,28 +28,6 @@ class RetryExceptionTest extends TestCase
 		$this->assertEquals($expected, $actual);
 	}
 
-	function testGetNumberOfFailedAttempts()
-	{
-		$expected = 0;
-
-		$exception = new RetryException('Foo', $expected, self::createAttempt());
-
-		$actual = $exception->getNumberOfFailedAttempts();
-
-		$this->assertEquals($expected, $actual);
-	}
-
-	function testGetLastFailedAttempt()
-	{
-		$expected = self::createAttempt();
-
-		$exception = new RetryException('Foo', 0, $expected);
-
-		$actual = $exception->getLastFailedAttempt();
-
-		$this->assertEquals($expected, $actual);
-	}
-
 	private static function createAttempt(): Attempt
 	{
 		return \Mockery::mock(Attempt::class)
