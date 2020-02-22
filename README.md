@@ -7,6 +7,12 @@ The elephant-retrying module provides a general purpose method for retrying arbi
 
 This is a fork of the excellent guava-retrying code posted [here](https://github.com/rholder/guava-retrying) by Ray Holder (rholder).
 
+## Port Accommodations
+
+* Generics have been removed because PHP does not support generics.
+* All time units have been converted to seconds of type `float`.
+* Time limiter has been removed as such functionality would be difficult to implement in PHP.
+
 ## Composer
 ```bash
 composer require tagadvance/elephant-retrying
