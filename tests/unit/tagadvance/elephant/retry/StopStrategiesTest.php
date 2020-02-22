@@ -18,6 +18,7 @@ class StopStrategiesTest extends TestCase
 	function testStopAfterAttemptValidation()
 	{
 		$this->expectException(\InvalidArgumentException::class);
+		$this->expectExceptionMessage('$maxAttemptNumber must be greater than or equal to 1');
 
 		StopStrategies::stopAfterAttempt(0);
 	}
@@ -41,8 +42,9 @@ class StopStrategiesTest extends TestCase
 	function testStopAfterDelayValidation()
 	{
 		$this->expectException(\InvalidArgumentException::class);
+		$this->expectExceptionMessage('$maxDelay must be greater than or equal to 0');
 
-		StopStrategies::stopAfterAttempt(-1);
+		StopStrategies::stopAfterDelay(-1);
 	}
 
 	function testStopAfterDelayZero()

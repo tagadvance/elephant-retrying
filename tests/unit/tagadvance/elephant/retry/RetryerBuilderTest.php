@@ -15,6 +15,7 @@ class RetryerBuilderTest extends TestCase
 	function testWithWaitStrategyValidation()
 	{
 		$this->expectException(IllegalStateException::class);
+		$this->expectExceptionMessage('a wait strategy has already been set');
 
 		$strategy = \Mockery::mock(WaitStrategy::class);
 		RetryerBuilder::newBuilder()->withWaitStrategy($strategy)->withWaitStrategy($strategy);
@@ -23,6 +24,7 @@ class RetryerBuilderTest extends TestCase
 	function testWithStopStrategyValidation()
 	{
 		$this->expectException(IllegalStateException::class);
+		$this->expectExceptionMessage('a stop strategy has already been set');
 
 		$strategy = \Mockery::mock(StopStrategy::class);
 		RetryerBuilder::newBuilder()->withStopStrategy($strategy)->withStopStrategy($strategy);
@@ -31,6 +33,7 @@ class RetryerBuilderTest extends TestCase
 	function testWithBlockStrategyValidation()
 	{
 		$this->expectException(IllegalStateException::class);
+		$this->expectExceptionMessage('a block strategy has already been set');
 
 		$strategy = \Mockery::mock(BlockStrategy::class);
 		RetryerBuilder::newBuilder()->withBlockStrategy($strategy)->withBlockStrategy($strategy);

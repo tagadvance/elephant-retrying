@@ -81,6 +81,7 @@ class IntegrationTest extends TestCase
 				->call($callable);
 		} catch (ExecutionException $e) {
 			$this->expectException(\DomainException::class);
+			$this->expectExceptionMessage('');
 			throw $e->getPrevious();
 		}
 	}
@@ -109,6 +110,7 @@ class IntegrationTest extends TestCase
 				->call($callable);
 		} catch (ExecutionException $e) {
 			$this->expectException(\DomainException::class);
+			$this->expectExceptionMessage('');
 			throw $e->getPrevious();
 		}
 	}

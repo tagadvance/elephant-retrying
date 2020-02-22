@@ -24,6 +24,7 @@ class WaitStrategiesTest extends TestCase
 	function testFixedWaitMinimumAtLeastZero()
 	{
 		$this->expectException(\InvalidArgumentException::class);
+		$this->expectExceptionMessage('$sleepTime must be greater than or equal to 0');
 
 		WaitStrategies::fixedWait(-1);
 	}
@@ -46,6 +47,7 @@ class WaitStrategiesTest extends TestCase
 	function testRandomWaitMaximumGreaterThanMinimum()
 	{
 		$this->expectException(\InvalidArgumentException::class);
+		$this->expectExceptionMessage('$maximum must be greater than $minimum but $maximum is 1 and $minimum is 1');
 
 		WaitStrategies::randomWait(1, 1);
 	}
@@ -53,6 +55,7 @@ class WaitStrategiesTest extends TestCase
 	function testRandomWaitMinimumAtLeastZero()
 	{
 		$this->expectException(\InvalidArgumentException::class);
+		$this->expectExceptionMessage('$minimum must be greater than or equal to 0');
 
 		WaitStrategies::randomWait(-1, 1);
 	}
@@ -81,6 +84,7 @@ class WaitStrategiesTest extends TestCase
 	function testIncrementingWaitValidation()
 	{
 		$this->expectException(\InvalidArgumentException::class);
+		$this->expectExceptionMessage('$initialSleepTime must be greater than or equal to 0');
 
 		WaitStrategies::incrementingWait(-1, 0);
 	}
@@ -106,6 +110,7 @@ class WaitStrategiesTest extends TestCase
 	function testExponentialValidationMultiplierLessThanMaximumWait()
 	{
 		$this->expectException(\InvalidArgumentException::class);
+		$this->expectExceptionMessage('$multiplier must be less than $maximumWait but $multiplier is 1 and $maximumWait is 1');
 
 		WaitStrategies::exponentialWait(1, 1);
 	}
@@ -113,6 +118,7 @@ class WaitStrategiesTest extends TestCase
 	function testExponentialValidationMaximumWaitLessThanZero()
 	{
 		$this->expectException(\InvalidArgumentException::class);
+		$this->expectExceptionMessage('$maximumWait must be greater than or equal to 0');
 
 		WaitStrategies::exponentialWait(1, -1);
 	}
@@ -120,6 +126,7 @@ class WaitStrategiesTest extends TestCase
 	function testExponentialValidationMultiplierZero()
 	{
 		$this->expectException(\InvalidArgumentException::class);
+		$this->expectExceptionMessage('$multiplier must be greater than 0');
 
 		WaitStrategies::exponentialWait(0);
 	}
@@ -145,6 +152,7 @@ class WaitStrategiesTest extends TestCase
 	function testFibonacciValidationMultiplierLessThanMaximumWait()
 	{
 		$this->expectException(\InvalidArgumentException::class);
+		$this->expectExceptionMessage('$multiplier must be less than $maximumWait but $multiplier is 1 and $maximumWait is 1');
 
 		WaitStrategies::fibonacciWait(1, 1);
 	}
@@ -152,6 +160,7 @@ class WaitStrategiesTest extends TestCase
 	function testFibonacciValidationMaximumWaitLessThanZero()
 	{
 		$this->expectException(\InvalidArgumentException::class);
+		$this->expectExceptionMessage('$maximumWait must be greater than or equal to 0');
 
 		WaitStrategies::fibonacciWait(1, -1);
 	}
@@ -159,6 +168,7 @@ class WaitStrategiesTest extends TestCase
 	function testFibonacciValidationMultiplierZero()
 	{
 		$this->expectException(\InvalidArgumentException::class);
+		$this->expectExceptionMessage('$multiplier must be greater than 0');
 
 		WaitStrategies::fibonacciWait(0);
 	}
@@ -184,6 +194,7 @@ class WaitStrategiesTest extends TestCase
 	function testExceptionValidation()
 	{
 		$this->expectException(\InvalidArgumentException::class);
+		$this->expectExceptionMessage('$exceptionClass must be valid');
 
 		$exceptionHandler = fn() => 0;
 		WaitStrategies::exceptionWait('Foo', $exceptionHandler);
@@ -226,6 +237,7 @@ class WaitStrategiesTest extends TestCase
 	function testJoinValidation()
 	{
 		$this->expectException(\InvalidArgumentException::class);
+		$this->expectExceptionMessage('{ } must not be empty');
 
 		WaitStrategies::join();
 	}

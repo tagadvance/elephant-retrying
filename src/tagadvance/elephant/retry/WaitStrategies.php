@@ -175,7 +175,7 @@ final class RandomWaitStrategy implements WaitStrategy
 	public function __construct(float $minimum, float $maximum)
 	{
 		Validator::min(0)->setName('$minimum')->check($minimum);
-		$template = "\$maximum must be > $minimum but \$maximum is $maximum and \$minimum is $minimum";
+		$template = "\$maximum must be greater than \$minimum but \$maximum is $maximum and \$minimum is $minimum";
 		Validator::callback(fn() => $maximum > $minimum)->setTemplate($template)->check(null);
 
 		$this->minimum = $minimum;
@@ -220,7 +220,8 @@ final class ExponentialWaitStrategy implements WaitStrategy
 	{
 		Validator::min(0, false)->setName('$multiplier')->check($multiplier);
 		Validator::min(0)->setName('$maximumWait')->check($maximumWait);
-		Validator::callback(fn() => $multiplier < $maximumWait)->setName('$multiplier < $maximumWait')->check(null);
+		$template = "\$multiplier must be less than \$maximumWait but \$multiplier is $multiplier and \$maximumWait is $maximumWait";
+		Validator::callback(fn() => $multiplier < $maximumWait)->setTemplate($template)->check(null);
 
 		$this->multiplier = $multiplier;
 		$this->maximumWait = $maximumWait;
@@ -253,7 +254,8 @@ final class FibonacciWaitStrategy implements WaitStrategy
 	{
 		Validator::min(0, false)->setName('$multiplier')->check($multiplier);
 		Validator::min(0)->setName('$maximumWait')->check($maximumWait);
-		Validator::callback(fn() => $multiplier < $maximumWait)->setName('$multiplier < $maximumWait')->check(null);
+		$template = "\$multiplier must be less than \$maximumWait but \$multiplier is $multiplier and \$maximumWait is $maximumWait";
+		Validator::callback(fn() => $multiplier < $maximumWait)->setTemplate($template)->check(null);
 
 		$this->multiplier = $multiplier;
 		$this->maximumWait = $maximumWait;

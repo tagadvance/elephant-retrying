@@ -105,7 +105,7 @@ final class StopAfterDelayStrategy implements StopStrategy
 
 	public function __construct(float $maxDelay)
 	{
-		Validator::min(0)->setName('maxDelay')->check($maxDelay);
+		Validator::min(0)->setName('$maxDelay')->check($maxDelay);
 		$this->maxDelay = $maxDelay;
 	}
 
