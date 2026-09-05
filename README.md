@@ -16,7 +16,7 @@ This is a fork of the excellent guava-retrying code posted [here](https://github
 
 ## Composer
 ```bash
-composer require "tagadvance/elephant-retrying:^2.0"
+composer require "tagadvance/elephant-retrying:^3.0"
 ```
 
 ## Quickstart
