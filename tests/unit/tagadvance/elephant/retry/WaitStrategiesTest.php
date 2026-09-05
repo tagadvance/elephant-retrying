@@ -71,14 +71,14 @@ class WaitStrategiesTest extends TestCase
         $set = [];
         for ($i = 0; $i < 1000; $i++) {
             $sleepTime = $waitStrategy->computeSleepTime($attempt);
-            $key = strval($sleepTime);
-
-            $this->assertArrayNotHasKey($key, $set);
-            $set[$key] = $sleepTime;
+            $set[strval($sleepTime)] = $sleepTime;
 
             $this->assertGreaterThanOrEqual($minimum, $sleepTime);
             $this->assertLessThanOrEqual($maximum, $sleepTime);
         }
+
+        // rand() has a finite range, so distinct draws may repeat; only require that it varies
+        $this->assertGreaterThan(1, count($set));
     }
 
     public function testIncrementingWaitValidation()
