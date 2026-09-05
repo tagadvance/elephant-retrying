@@ -29,10 +29,8 @@ namespace tagadvance\elephant\retry;
 interface RetryListener
 {
     /**
-     * This method with fire no matter what the result is and before the rejection predicate and stop strategies are
-     * applied.
-     *
-     * @param Attempt $attempt the current `Attempt`
+     * Fires on every attempt, successful or not, before the rejection predicate and stop strategy see it. A
+     * throwable escaping here propagates out of `Retryer::call()` and abandons the retry sequence.
      */
     public function onRetry(Attempt $attempt): void;
 }

@@ -20,8 +20,15 @@ declare(strict_types=1);
 
 namespace tagadvance\elephant\retry;
 
+/**
+ * Internal helpers backing the validation the public factories perform on their arguments.
+ */
 class Utilities
 {
+    /**
+     * Whether `$class` names something that can be thrown. Interfaces do not qualify, so a user-defined
+     * `interface MyError extends \Throwable` is rejected.
+     */
     public static function isThrowable(string $class)
     {
         if ($class === \Throwable::class) {

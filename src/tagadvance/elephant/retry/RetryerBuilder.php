@@ -24,7 +24,8 @@ namespace tagadvance\elephant\retry;
 use Respect\Validation\Validator;
 
 /**
- * A builder used to configure and create a `Retryer`.
+ * Configures and creates a `Retryer`. Conditions added by the `retryIf*` methods are OR'd together, and with none
+ * of them configured the retryer never retries at all.
  *
  * @see Retryer
  */
@@ -42,21 +43,14 @@ class RetryerBuilder
         $this->listeners = [];
     }
 
-    /**
-     * Constructs a new builder
-     *
-     * @return self the new builder
-     */
     public static function newBuilder(): self
     {
         return new self();
     }
 
     /**
-     * Adds a listener that will be notified of each attempt that is made
-     *
-     * @param RetryListener $listener Listener to add
-     * @return self <code>this</code>
+     * Registers a listener to be notified of every attempt. Unlike the strategy setters this accumulates, so
+     * calling it twice registers two listeners rather than throwing.
      */
     public function withRetryListener(RetryListener $listener): self
     {
@@ -66,12 +60,9 @@ class RetryerBuilder
     }
 
     /**
-     * Sets the wait strategy used to decide how long to sleep between failed attempts.
-     * The default strategy is to retry immediately after a failed attempt.
+     * Defaults to `WaitStrategies::noWait()`, which retries immediately.
      *
-     * @param WaitStrategy $waitStrategy the strategy used to sleep between failed attempts
-     * @return self <code>this</code>
-     * @throws IllegalStateException if a wait strategy has already been set.
+     * @throws IllegalStateException if a wait strategy has already been set; this is a one-shot setter
      */
     public function withWaitStrategy(WaitStrategy $waitStrategy): self
     {
@@ -85,11 +76,9 @@ class RetryerBuilder
     }
 
     /**
-     * Sets the stop strategy used to decide when to stop retrying. The default strategy is to not stop at all .
+     * Defaults to `StopStrategies::neverStop()`, which retries forever.
      *
-     * @param StopStrategy $stopStrategy the strategy used to decide when to stop retrying
-     * @return self <code>this</code>
-     * @throws IllegalStateException if a stop strategy has already been set.
+     * @throws IllegalStateException if a stop strategy has already been set; this is a one-shot setter
      */
     public function withStopStrategy(StopStrategy $stopStrategy): self
     {
@@ -104,11 +93,9 @@ class RetryerBuilder
 
 
     /**
-     * Sets the block strategy used to decide how to block between retry attempts. The default strategy is to use Thread#sleep().
+     * Defaults to `BlockStrategies::sleepStrategy()`, which blocks with `usleep()`.
      *
-     * @param BlockStrategy $blockStrategy the strategy used to decide how to block between retry attempts
-     * @return self <code>this</code>
-     * @throws IllegalStateException if a block strategy has already been set.
+     * @throws IllegalStateException if a block strategy has already been set; this is a one-shot setter
      */
     public function withBlockStrategy(BlockStrategy $blockStrategy): self
     {
@@ -122,11 +109,10 @@ class RetryerBuilder
     }
 
     /**
-     * Configures the retryer to retry if an exception of the given class (or subclass of the given class) is thrown by
-     * the call.
+     * Retries when the call throws `$exceptionClass` or a subclass of it.
      *
-     * @param string $exceptionClass the type of the exception which should cause the retryer to retry
-     * @return self <code>this</code>
+     * @throws \InvalidArgumentException if `$exceptionClass` does not name a throwable class; an interface
+     * extending `\Throwable` does not qualify
      */
     public function retryIfExceptionOfType(string $exceptionClass): self
     {
@@ -136,10 +122,10 @@ class RetryerBuilder
     }
 
     /**
-     * Configures the retryer to retry if an exception satisfying the given predicate is thrown by the call.
+     * Retries when the call throws and the predicate accepts the throwable.
      *
-     * @param callable $exceptionPredicate the predicate which causes a retry if satisfied
-     * @return self <code>this</code>
+     * @param callable $exceptionPredicate `fn(\Throwable): bool`, receiving the original throwable rather than
+     * the `ExecutionException` wrapper
      */
     public function retryIfException(callable $exceptionPredicate): self
     {
@@ -149,11 +135,10 @@ class RetryerBuilder
     }
 
     /**
-     * Configures the retryer to retry if the result satisfies the given predicate.
+     * Retries when the call returns and the predicate accepts the returned value.
      *
-     * @param callable $resultPredicate a predicate applied to the result, and which causes the retryer to retry if the predicate
-     * is satisfied
-     * @return self <code>this</code>
+     * @param callable $resultPredicate `fn(mixed): bool`; true means the result is unacceptable and warrants
+     * another attempt
      */
     public function retryIfResult(callable $resultPredicate): self
     {
@@ -163,9 +148,7 @@ class RetryerBuilder
     }
 
     /**
-     * Builds the retryer.
-     *
-     * @return Retryer the built retryer.
+     * Creates the retryer, substituting each documented default for any strategy left unset.
      */
     public function build(): Retryer
     {

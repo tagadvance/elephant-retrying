@@ -27,54 +27,37 @@ namespace tagadvance\elephant\retry;
 interface Attempt
 {
     /**
-     * Returns the result of the attempt, if any.
+     * The outcome as the caller of `Retryer::call()` sees it: the result, or the failure rethrown wrapped.
      *
-     * @return mixed the result of the attempt
-     * @throws ExecutionException if an exception was thrown by the attempt. The thrown exception is set as the cause of the ExecutionException
+     * @throws ExecutionException if the call threw; the original throwable is the wrapped cause
      */
     public function get();
 
-    /**
-     * Tells if the call returned a result or not
-     *
-     * @return bool <code>true</code> if the call returned a result, <code>false</code> if it threw an exception
-     */
     public function hasResult(): bool;
 
-    /**
-     * Tells if the call threw an exception or not
-     *
-     * @return bool <code>true</code> if the call threw an exception, <code>false</code> if it returned a result
-     */
     public function hasException(): bool;
 
     /**
-     * Gets the result of the call
+     * The result, without the `ExecutionException` wrapping that `get()` applies to a failure.
      *
-     * @return mixed the result of the call
-     * @throws IllegalStateException if the call didn't return a result, but threw an exception, as indicated by {@link #hasResult()}
+     * @throws IllegalStateException if the call threw rather than returning, as `hasException()` reports
      */
     public function getResult();
 
     /**
-     * Gets the exception thrown by the call
+     * The throwable the call raised, unwrapped.
      *
-     * @return \Throwable the exception thrown by the call
-     * @throws IllegalStateException if the call didn't throw an exception, as indicated by {@link #hasException()}
+     * @throws IllegalStateException if the call returned rather than throwing, as `hasResult()` reports
      */
     public function getExceptionCause(): \Throwable;
 
     /**
      * The number, starting from 1, of this attempt.
-     *
-     * @return int the attempt number
      */
     public function getAttemptNumber(): int;
 
     /**
      * The delay since the start of the first attempt, in seconds.
-     *
-     * @return float the delay since the start of the first attempt, in seconds
      */
     public function getDelaySinceFirstAttempt(): float;
 }

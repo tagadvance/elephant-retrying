@@ -33,10 +33,8 @@ final class StopStrategies
     private function __construct() {}
 
     /**
-     * Returns a stop strategy which never stops retrying. It might be best to try not to abuse services with this kind
-     * of behavior when small wait intervals between retry attempts are being used.
-     *
-     * @return NeverStopStrategy a stop strategy which never stops
+     * Never gives up, so `Retryer::call()` may block forever. This is the `RetryerBuilder` default; pair it with
+     * a wait strategy that backs off before pointing it at a service.
      */
     public static function neverStop(): StopStrategy
     {
@@ -49,10 +47,10 @@ final class StopStrategies
     }
 
     /**
-     * Returns a stop strategy which stops after N failed attempts.
+     * Gives up once `$attemptNumber` attempts have failed: a total call count rather than a retry count, so 3
+     * means one call and two retries.
      *
-     * @param int $attemptNumber the number of failed attempts before stopping
-     * @return StopAfterAttemptStrategy a stop strategy which stops after `$attemptNumber` attempts
+     * @throws \InvalidArgumentException if `$attemptNumber` is less than 1
      */
     public static function stopAfterAttempt(int $attemptNumber): StopStrategy
     {
@@ -60,12 +58,10 @@ final class StopStrategies
     }
 
     /**
-     * Returns a stop strategy which stops after a given delay. If an unsuccessful attempt is made, this `StopStrategy`
-     * will check if the amount of time that's passed from the first attempt has exceeded the given delay amount. If it
-     * has exceeded this delay, then using this strategy causes the retrying to stop.
+     * Gives up once `$delayInSeconds` has elapsed since the first attempt began. The budget is only checked
+     * between attempts, so a single slow call can overrun it by any amount.
      *
-     * @param float $delayInSeconds the delay, starting from first attempt
-     * @return StopAfterDelayStrategy a stop strategy which stops after `$delayInSeconds`
+     * @throws \InvalidArgumentException if `$delayInSeconds` is negative
      */
     public static function stopAfterDelay(float $delayInSeconds): StopStrategy
     {

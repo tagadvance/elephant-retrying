@@ -34,11 +34,10 @@ final class RetryException extends \Exception
     private Attempt $lastFailedAttempt;
 
     /**
-     * If the last `Attempt` had an Exception, ensure it is available in the stack trace.
+     * If `$lastFailedAttempt` holds an exception, it becomes this exception's `getPrevious()` cause.
      *
-     * @param string $message Exception description to be added to the stack trace
-     * @param int $numberOfFailedAttempts times we've tried and failed
-     * @param Attempt $lastFailedAttempt what happened the last time we failed
+     * @param string|null $message `null` selects the default, "Retrying failed to complete successfully after
+     * N attempts."; that is what `Retryer` itself passes
      */
     public function __construct(?string $message, int $numberOfFailedAttempts, Attempt $lastFailedAttempt)
     {
@@ -51,21 +50,11 @@ final class RetryException extends \Exception
         $this->lastFailedAttempt = $lastFailedAttempt;
     }
 
-    /**
-     * Returns the number of failed attempts
-     *
-     * @return int the number of failed attempts
-     */
     public function getNumberOfFailedAttempts(): int
     {
         return $this->numberOfFailedAttempts;
     }
 
-    /**
-     * Returns the last failed attempt
-     *
-     * @return Attempt the last failed attempt
-     */
     public function getLastFailedAttempt(): Attempt
     {
         return $this->lastFailedAttempt;

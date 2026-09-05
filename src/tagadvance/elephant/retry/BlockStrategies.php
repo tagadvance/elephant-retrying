@@ -31,9 +31,7 @@ final class BlockStrategies
     private function __construct() {}
 
     /**
-     * Returns a block strategy that puts the current thread to sleep between retries.
-     *
-     * @return BlockStrategy a block strategy that puts the current thread to sleep between retries
+     * Returns the `RetryerBuilder` default: a block strategy that suspends the running process with `usleep()`.
      */
     public static function sleepStrategy(): BlockStrategy
     {
@@ -50,6 +48,12 @@ final class SleepStrategy implements BlockStrategy
 {
     public const MICROSECONDS_PER_SECOND = 1000000.0;
 
+    /**
+     * Resolution is one microsecond, so anything shorter truncates to no wait at all.
+     *
+     * @throws \ValueError if `$sleepSeconds` is negative, or large enough (beyond roughly 9.2e12 seconds) that
+     * the conversion to microseconds overflows and wraps negative
+     */
     public function block(float $sleepSeconds): void
     {
         $microseconds = intval($sleepSeconds * self::MICROSECONDS_PER_SECOND);

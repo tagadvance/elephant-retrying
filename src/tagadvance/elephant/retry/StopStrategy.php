@@ -27,10 +27,9 @@ namespace tagadvance\elephant\retry;
 interface StopStrategy
 {
     /**
-     * Returns <code>true</code> if the retryer should stop retrying.
+     * Whether the retryer should give up rather than make a further attempt.
      *
-     * @param Attempt $failedAttempt the previous failed `Attempt`
-     * @return bool <code>true</code> if the retryer must stop, <code>false</code> otherwise
+     * @param Attempt $failedAttempt the attempt that has just been rejected, not the one being contemplated
      */
     public function shouldStop(Attempt $failedAttempt): bool;
 }

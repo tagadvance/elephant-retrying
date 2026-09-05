@@ -27,10 +27,9 @@ namespace tagadvance\elephant\retry;
 interface WaitStrategy
 {
     /**
-     * Returns the time, in seconds, to sleep before retrying.
+     * The time, in seconds, to wait before the next attempt.
      *
-     * @param Attempt $failedAttempt the previous failed `Attempt`
-     * @return float the sleep time before next attempt
+     * @param Attempt $failedAttempt the attempt that has just been rejected, numbered from 1
      */
     public function computeSleepTime(Attempt $failedAttempt): float;
 }

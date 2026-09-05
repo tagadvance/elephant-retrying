@@ -22,12 +22,8 @@ declare(strict_types=1);
 namespace tagadvance\elephant\retry;
 
 /**
- * A retryer, which executes a call, and retries it until it succeeds, or a stop strategy decides to stop retrying. A
- * wait strategy is used to sleep between attempts. The strategy to decide if the call succeeds or not is also configurable.
- * <p></p>
- * A retryer can also wrap the callable into a RetryerCallable, which can be submitted to an executor.
- * <p></p>
- * Retryer instances are better constructed with a `RetryerBuilder`.
+ * Executes a call and retries it until an attempt is accepted or the stop strategy gives up, waiting between
+ * attempts as the wait and block strategies direct. Build one with `RetryerBuilder` rather than by hand.
  *
  * @see RetryerBuilder
  */
@@ -40,15 +36,8 @@ final class Retryer
     private array $listeners;
 
     /**
-     * Constructor
-     *
-     * @param StopStrategy $stopStrategy the strategy used to decide when the retryer must stop retrying
-     * @param WaitStrategy $waitStrategy the strategy used to decide how much time to sleep between attempts
-     * @param BlockStrategy $blockStrategy the strategy used to decide how to block between retry attempts
-     * @param callable $rejectionPredicate the predicate used to decide if the attempt must be rejected or not. If an attempt is
-     * rejected, the retryer will retry the call, unless the stop strategy indicates otherwise or the thread is
-     * interrupted.
-     * @param RetryListener ...$listeners collection of retry listeners
+     * @param callable $rejectionPredicate `fn(Attempt): bool`; returning true rejects the attempt and triggers a
+     * retry, unless the stop strategy says otherwise
      */
     public function __construct(
         StopStrategy $stopStrategy,
@@ -65,17 +54,12 @@ final class Retryer
     }
 
     /**
-     * Executes the given callable. If the rejection predicate accepts the attempt, the stop strategy is used to decide
-     * if a new attempt must be made. Then the wait strategy is used to decide how much time to sleep and a new attempt
-     * is made.
+     * Runs `$callable` until an attempt is accepted, blocking the caller for the whole sequence including every
+     * wait. Anything thrown by a listener, by the rejection predicate or by a strategy propagates as-is.
      *
-     * @param callable $callable the callable task to be executed
-     * @return mixed the computed result of the given callable
-     * @throws ExecutionException if the given callable throws an exception, and the rejection predicate considers the
-     * attempt as successful. The original exception is wrapped into an ExecutionException.
-     * @throws RetryException if all the attempts failed before the stop strategy decided to abort, or the thread was
-     * interrupted. Note that if the thread is interrupted, this exception is thrown and the thread's interrupt status
-     * is set.
+     * @throws ExecutionException if the accepted attempt was one that threw; the original throwable is the
+     * wrapped cause
+     * @throws RetryException if the stop strategy gave up, carrying the last failed attempt
      */
     public function call(callable $callable)
     {
@@ -107,10 +91,8 @@ final class Retryer
     }
 
     /**
-     * TODO: documentation
-     *
-     * @param callable $callable the callable to wrap
-     * @return callable a callable that behaves like the given `$callable` with retry behavior defined by this `Retryer`
+     * Binds `$callable` to this retryer so it can be handed anywhere a plain callable is wanted; invoking the
+     * returned closure is exactly a `call()`, retries, blocking and exceptions included.
      */
     public function wrap(callable $callable): callable
     {
@@ -118,6 +100,9 @@ final class Retryer
     }
 }
 
+/**
+ * The `Attempt` handed to listeners and strategies when the call returned a value.
+ */
 class ResultAttempt implements Attempt
 {
     private $result;
@@ -167,6 +152,9 @@ class ResultAttempt implements Attempt
     }
 }
 
+/**
+ * The `Attempt` handed to listeners and strategies when the call threw.
+ */
 final class ExceptionAttempt implements Attempt
 {
     private ExecutionException $e;

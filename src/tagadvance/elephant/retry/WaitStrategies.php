@@ -33,9 +33,7 @@ final class WaitStrategies
     private function __construct() {}
 
     /**
-     * Returns a wait strategy that doesn't sleep at all before retrying. Use this at your own risk.
-     *
-     * @return WaitStrategy a wait strategy that doesn't wait between retries
+     * Returns the `RetryerBuilder` default: no wait at all between attempts. Use this at your own risk.
      */
     public static function noWait(): WaitStrategy
     {
@@ -48,11 +46,9 @@ final class WaitStrategies
     }
 
     /**
-     * Returns a wait strategy that sleeps a fixed amount of time before retrying.
+     * Waits the same amount before every retry.
      *
-     * @param float $sleepTimeSeconds the time to sleep
-     * @return WaitStrategy a wait strategy that sleeps a fixed amount of time
-     * @throws \InvalidArgumentException if `$sleepTimeSeconds` < 0
+     * @throws \InvalidArgumentException if `$sleepTimeSeconds` is negative
      */
     public static function fixedWait(float $sleepTimeSeconds): WaitStrategy
     {
@@ -60,13 +56,11 @@ final class WaitStrategies
     }
 
     /**
-     * Returns a strategy that sleeps a random amount of time before retrying.
+     * Draws a fresh wait for every retry from the closed interval `[$minimumTimeSeconds, $maximumTimeSeconds]`;
+     * unlike upstream guava-retrying, the maximum itself can come up.
      *
-     * @param float $minimumTimeSeconds the minimum time to sleep
-     * @param float $maximumTimeSeconds the maximum time to sleep
-     * @return RandomWaitStrategy a wait strategy with a random wait time
-     * @throws \InvalidArgumentException if `$minimumTimeSeconds` < 0
-     * @throws \InvalidArgumentException if `$minimumTimeSeconds` >= `$maximumTimeSeconds`
+     * @throws \InvalidArgumentException if `$minimumTimeSeconds` is negative, or is not less than
+     * `$maximumTimeSeconds`
      */
     public static function randomWait(float $minimumTimeSeconds, float $maximumTimeSeconds): WaitStrategy
     {
@@ -74,13 +68,10 @@ final class WaitStrategies
     }
 
     /**
-     * Returns a strategy that sleeps a fixed amount of time after the first failed attempt and in incrementing amounts
-     * of time after each additional failed attempt.
+     * Waits `$initialSleepTimeSeconds` after the first failure and one further `$incrementSeconds` after each
+     * failure thereafter. A negative increment is permitted and simply floors the wait at zero.
      *
-     * @param float $initialSleepTimeSeconds the time to sleep before retrying the first time
-     * @param float $incrementSeconds the increment added to the previous sleep time after each failed attempt
-     * @return WaitStrategy a wait strategy that incrementally sleeps an additional fixed time after each failed attempt
-     * @throws \InvalidArgumentException if `$initialSleepTimeSeconds` < 0
+     * @throws \InvalidArgumentException if `$initialSleepTimeSeconds` is negative
      */
     public static function incrementingWait(float $initialSleepTimeSeconds, float $incrementSeconds): WaitStrategy
     {
@@ -88,14 +79,12 @@ final class WaitStrategies
     }
 
     /**
-     * Returns a strategy which sleeps for an exponential amount of time after the first failed attempt, and in
-     * exponentially incrementing amounts after each failed attempt up to the maximumTime.
-     * The wait time between the retries can be controlled by the multiplier.
+     * Waits `$multiplier` after the first failure and doubles it after each one thereafter, capped at
+     * `$maximumTimeSeconds`. This port deliberately halves upstream guava-retrying's schedule, so it disagrees
+     * with the faithful `fibonacciWait()` about what attempt 1 is worth.
      *
-     * @param float $multiplier multiply the wait time calculated by this
-     * @param float $maximumTimeSeconds the maximum time to sleep
-     * @return WaitStrategy a wait strategy that increments with each failed attempt using exponential backoff
-     * @throws \InvalidArgumentException
+     * @throws \InvalidArgumentException if `$multiplier` is not greater than 0, if `$maximumTimeSeconds` is
+     * negative, or if `$multiplier` is not less than `$maximumTimeSeconds`
      */
     public static function exponentialWait(float $multiplier = 1, float $maximumTimeSeconds = PHP_FLOAT_MAX): WaitStrategy
     {
@@ -104,15 +93,11 @@ final class WaitStrategies
 
 
     /**
-     * Returns a strategy which sleeps for an increasing amount of time after the first failed attempt,
-     * and in Fibonacci increments after each failed attempt up to the `$maximumTimeSeconds`.
-     * The wait time between the retries can be controlled by the multiplier.
-     * nextWaitTime = fibonacciIncrement * `$multiplier`.
+     * Scales the Fibonacci sequence by `$multiplier`, capped at `$maximumTimeSeconds`, so the first two failures
+     * wait the same amount before the growth begins.
      *
-     * @param float $multiplier multiply the wait time calculated by this
-     * @param float $maximumTimeSeconds the maximum time to sleep
-     * @return WaitStrategy a wait strategy that increments with each failed attempt using a Fibonacci sequence
-     * @throws \InvalidArgumentException
+     * @throws \InvalidArgumentException if `$multiplier` is not greater than 0, if `$maximumTimeSeconds` is
+     * negative, or if `$multiplier` is not less than `$maximumTimeSeconds`
      */
     public static function fibonacciWait(float $multiplier = 1, float $maximumTimeSeconds = PHP_FLOAT_MAX): WaitStrategy
     {
@@ -120,13 +105,13 @@ final class WaitStrategies
     }
 
     /**
-     * Returns a strategy which sleeps for an amount of time based on the Exception that occurred. The `$function`
-     * determines how the sleep time should be calculated for the given `exceptionClass`. If the exception does not match, a wait time of 0 is returned.
+     * Derives the wait from the throwable itself; an attempt that succeeded, or that failed with anything other
+     * than `$exceptionClass`, waits 0.
      *
-     * @param callable $function function to calculate sleep time
-     * @param string $exceptionClass class to calculate sleep time from
-     * @return WaitStrategy a wait strategy calculated from the failed attempt
-     * @throws \InvalidArgumentException if `$exceptionClass` does not exist
+     * @param string $exceptionClass only a throwable of this class, or a subclass of it, gets a computed wait
+     * @param callable $function `fn(\Throwable): float` returning seconds
+     * @throws \InvalidArgumentException if `$exceptionClass` does not name a throwable class; an interface
+     * extending `\Throwable` does not qualify
      */
     public static function exceptionWait(string $exceptionClass, callable $function): WaitStrategy
     {
@@ -134,12 +119,10 @@ final class WaitStrategies
     }
 
     /**
-     * Joins one or more wait strategies to derive a composite wait strategy.
-     * The new joined strategy will have a wait time which is total of all wait times computed one after another in order.
+     * Sums the waits every given strategy computes for the same attempt. Nothing clamps the total, so a strategy
+     * returning a negative wait can drag it below zero and make `SleepStrategy` throw.
      *
-     * @param WaitStrategy ...$waitStrategies Wait strategies that need to be applied one after another for computing the sleep time.
-     * @return CompositeWaitStrategy a composite wait strategy
-     * @throws \InvalidArgumentException if `$waitStrategies` is empty
+     * @throws \InvalidArgumentException if no strategies are given
      */
     public static function join(WaitStrategy...$waitStrategies): WaitStrategy
     {
