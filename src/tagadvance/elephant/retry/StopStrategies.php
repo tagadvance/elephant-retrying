@@ -30,6 +30,8 @@ use Respect\Validation\Validator;
  */
 final class StopStrategies
 {
+    private static ?StopStrategy $neverStop = null;
+
     private function __construct() {}
 
     /**
@@ -38,12 +40,7 @@ final class StopStrategies
      */
     public static function neverStop(): StopStrategy
     {
-        static $neverStop = null;
-        if ($neverStop === null) {
-            $neverStop = new NeverStopStrategy();
-        }
-
-        return $neverStop;
+        return self::$neverStop ??= new NeverStopStrategy();
     }
 
     /**

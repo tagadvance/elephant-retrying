@@ -28,6 +28,8 @@ namespace tagadvance\elephant\retry;
  */
 final class BlockStrategies
 {
+    private static ?BlockStrategy $sleepStrategy = null;
+
     private function __construct() {}
 
     /**
@@ -35,12 +37,7 @@ final class BlockStrategies
      */
     public static function sleepStrategy(): BlockStrategy
     {
-        static $sleepStrategy = null;
-        if ($sleepStrategy === null) {
-            $sleepStrategy = new SleepStrategy();
-        }
-
-        return $sleepStrategy;
+        return self::$sleepStrategy ??= new SleepStrategy();
     }
 }
 

@@ -30,6 +30,8 @@ use Respect\Validation\Validator;
  */
 final class WaitStrategies
 {
+    private static ?WaitStrategy $instance = null;
+
     private function __construct() {}
 
     /**
@@ -37,12 +39,7 @@ final class WaitStrategies
      */
     public static function noWait(): WaitStrategy
     {
-        static $instance = null;
-        if ($instance === null) {
-            $instance = new FixedWaitStrategy();
-        }
-
-        return $instance;
+        return self::$instance ??= new FixedWaitStrategy();
     }
 
     /**
