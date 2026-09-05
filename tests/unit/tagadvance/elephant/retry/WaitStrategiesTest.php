@@ -204,12 +204,9 @@ class WaitStrategiesTest extends TestCase
     {
         $exceptionHandler = fn(\RuntimeException $e) => 1;
 
-        $attempt = \Mockery::mock(Attempt::class)
-            ->shouldReceive('hasException')
-            ->andReturn(true)
-            ->shouldReceive('getExceptionCause')
-            ->andReturn(new \RuntimeException())
-            ->getMock();
+        $attempt = \Mockery::mock(Attempt::class);
+        $attempt->shouldReceive('hasException')->andReturn(true);
+        $attempt->shouldReceive('getExceptionCause')->andReturn(new \RuntimeException());
 
         $waitStrategy = WaitStrategies::exceptionWait(\RuntimeException::class, $exceptionHandler);
 
@@ -221,12 +218,9 @@ class WaitStrategiesTest extends TestCase
     {
         $exceptionHandler = fn(\RuntimeException $e) => 1;
 
-        $attempt = \Mockery::mock(Attempt::class)
-            ->shouldReceive('hasException')
-            ->andReturn(true)
-            ->shouldReceive('getExceptionCause')
-            ->andReturn(new \Exception())
-            ->getMock();
+        $attempt = \Mockery::mock(Attempt::class);
+        $attempt->shouldReceive('hasException')->andReturn(true);
+        $attempt->shouldReceive('getExceptionCause')->andReturn(new \Exception());
 
         $waitStrategy = WaitStrategies::exceptionWait(\RuntimeException::class, $exceptionHandler);
 

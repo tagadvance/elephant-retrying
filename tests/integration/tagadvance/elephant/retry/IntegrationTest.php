@@ -20,10 +20,9 @@ class IntegrationTest extends TestCase
             ->shouldReceive('computeSleepTime')->andReturnValues($range)
             ->getMock();
 
-        $blockStrategy = \Mockery::mock(BlockStrategy::class)
-            ->shouldReceive('block')->with(1)
-            ->shouldReceive('block')->with(2)
-            ->getMock();
+        $blockStrategy = \Mockery::mock(BlockStrategy::class);
+        $blockStrategy->shouldReceive('block')->with(1);
+        $blockStrategy->shouldReceive('block')->with(2);
 
         $retryListener = \Mockery::mock(RetryListener::class)
             ->shouldReceive('onRetry')->with(
