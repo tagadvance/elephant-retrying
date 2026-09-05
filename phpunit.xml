@@ -1,14 +1,17 @@
-<phpunit bootstrap="./bootstrap.php" colors="false">
+<?xml version="1.0"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/13.3/phpunit.xsd"
+         bootstrap="vendor/autoload.php"
+         colors="true"
+         cacheDirectory=".phpunit.cache">
+  <testsuites>
     <testsuite name="ElephantRetryingTests">
-        <directory>./</directory>
+      <directory>tests</directory>
     </testsuite>
-
-    <filter>
-        <whitelist>
-            <directory suffix=".php">./src</directory>
-            <exclude>
-                <directory suffix=".php">./tests</directory>
-            </exclude>
-        </whitelist>
-    </filter>
+  </testsuites>
+  <source>
+    <include>
+      <directory suffix=".php">src</directory>
+    </include>
+  </source>
 </phpunit>
