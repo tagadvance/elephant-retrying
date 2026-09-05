@@ -310,7 +310,10 @@ final class ExceptionWaitStrategy implements WaitStrategy
 final class CompositeWaitStrategy implements WaitStrategy
 {
     /**
-     * @var list<WaitStrategy>
+     * Not a list: spreading a string-keyed array into the variadic constructor keeps those
+     * keys.
+     *
+     * @var array<array-key, WaitStrategy>
      */
     private array $waitStrategies;
 
