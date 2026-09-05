@@ -44,7 +44,8 @@ final class RetryException extends \Exception
     {
         $message = $message ?? "Retrying failed to complete successfully after $numberOfFailedAttempts attempts.";
         $code = 0;
-        parent::__construct($message, $code, $lastFailedAttempt->getExceptionCause());
+        $cause = $lastFailedAttempt->hasException() ? $lastFailedAttempt->getExceptionCause() : null;
+        parent::__construct($message, $code, $cause);
 
         $this->numberOfFailedAttempts = $numberOfFailedAttempts;
         $this->lastFailedAttempt = $lastFailedAttempt;

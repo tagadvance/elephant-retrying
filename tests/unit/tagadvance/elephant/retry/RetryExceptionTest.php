@@ -30,9 +30,10 @@ class RetryExceptionTest extends TestCase
 
     private static function createAttempt(): Attempt
     {
-        return \Mockery::mock(Attempt::class)
-            ->shouldReceive('getExceptionCause')
-            ->andReturn(new \Exception())
-            ->getMock();
+        $attempt = \Mockery::mock(Attempt::class);
+        $attempt->shouldReceive('hasException')->andReturn(true);
+        $attempt->shouldReceive('getExceptionCause')->andReturn(new \Exception());
+
+        return $attempt;
     }
 }

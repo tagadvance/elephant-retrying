@@ -136,4 +136,22 @@ class IntegrationTest extends TestCase
             $this->assertSame($cause, $e->getLastFailedAttempt()->getExceptionCause());
         }
     }
+    public function testStopAfterAttemptThrowsRetryExceptionWhenAttemptFailedWithResult()
+    {
+        $callable = fn() => null;
+
+        $retryer = RetryerBuilder::newBuilder()
+            ->retryIfResult('is_null')
+            ->withStopStrategy(StopStrategies::stopAfterAttempt(2))
+            ->build();
+
+        try {
+            $retryer->call($callable);
+            $this->fail('expected a ' . RetryException::class);
+        } catch (RetryException $e) {
+            $this->assertEquals(2, $e->getNumberOfFailedAttempts());
+            $this->assertNull($e->getPrevious());
+            $this->assertFalse($e->getLastFailedAttempt()->hasException());
+        }
+    }
 }
