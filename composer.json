@@ -1,7 +1,14 @@
 {
     "name": "tagadvance/elephant-retrying",
-    "description": "This is a port of the guava-retrying module to allow for the creation of configurable retrying strategies for an arbitrary function call, such as something that talks to a remote service with flaky uptime.",
+    "description": "A port of guava-retrying providing configurable retry strategies for arbitrary PHP calls.",
     "type": "library",
+    "keywords": [
+        "retry",
+        "backoff",
+        "resilience",
+        "fault-tolerance",
+        "guava-retrying"
+    ],
     "license": "Apache-2.0",
     "authors": [
         {
