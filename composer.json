@@ -28,12 +28,12 @@
     },
     "autoload": {
         "psr-4": {
-            "": "src/"
+            "tagadvance\\": "src/tagadvance/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "": ["tests/unit/", "tests/integration/"]
+            "tagadvance\\": ["tests/unit/tagadvance/", "tests/integration/tagadvance/"]
         }
     }
 }
