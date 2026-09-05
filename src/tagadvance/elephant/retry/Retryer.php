@@ -32,7 +32,15 @@ final class Retryer
     private StopStrategy $stopStrategy;
     private WaitStrategy $waitStrategy;
     private BlockStrategy $blockStrategy;
+
+    /**
+     * @var callable(Attempt): bool
+     */
     private $rejectionPredicate;
+
+    /**
+     * @var list<RetryListener>
+     */
     private array $listeners;
 
     /**
@@ -105,11 +113,11 @@ final class Retryer
  */
 class ResultAttempt implements Attempt
 {
-    private $result;
+    private mixed $result;
     private int $attemptNumber;
     private float $delaySinceFirstAttempt;
 
-    public function __construct($result, int $attemptNumber, float $delaySinceFirstAttempt)
+    public function __construct(mixed $result, int $attemptNumber, float $delaySinceFirstAttempt)
     {
         $this->result = $result;
         $this->attemptNumber = $attemptNumber;

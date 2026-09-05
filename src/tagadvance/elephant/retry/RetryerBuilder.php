@@ -34,7 +34,15 @@ class RetryerBuilder
     private StopStrategy $stopStrategy;
     private WaitStrategy $waitStrategy;
     private BlockStrategy $blockStrategy;
+
+    /**
+     * @var callable(Attempt): bool
+     */
     private $rejectionPredicate;
+
+    /**
+     * @var list<RetryListener>
+     */
     private array $listeners;
 
     private function __construct()

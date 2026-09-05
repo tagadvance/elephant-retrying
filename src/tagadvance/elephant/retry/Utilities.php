@@ -29,7 +29,7 @@ class Utilities
      * Whether `$class` names something that can be thrown. Interfaces do not qualify, so a user-defined
      * `interface MyError extends \Throwable` is rejected.
      */
-    public static function isThrowable(string $class)
+    public static function isThrowable(string $class): bool
     {
         if ($class === \Throwable::class) {
             return true;

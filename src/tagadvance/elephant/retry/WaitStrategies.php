@@ -281,6 +281,10 @@ final class FibonacciWaitStrategy implements WaitStrategy
 final class ExceptionWaitStrategy implements WaitStrategy
 {
     private string $exceptionClass;
+
+    /**
+     * @var callable(\Throwable): float
+     */
     private $function;
 
     public function __construct(string $exceptionClass, callable $function)
@@ -305,6 +309,9 @@ final class ExceptionWaitStrategy implements WaitStrategy
 
 final class CompositeWaitStrategy implements WaitStrategy
 {
+    /**
+     * @var list<WaitStrategy>
+     */
     private array $waitStrategies;
 
     public function __construct(WaitStrategy ...$waitStrategies)
