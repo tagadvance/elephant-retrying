@@ -97,6 +97,3 @@ Inspiration for this implementation came from [Efficient retry/backoff mechanism
 ## License
 The guava-retrying module is released under version 2.0 of the
 [Apache License](http://www.apache.org/licenses/LICENSE-2.0).
-
-## Sponsor
-If you find this useful, you can [sponsor Tag on GitHub](https://github.com/sponsors/tagadvance).
