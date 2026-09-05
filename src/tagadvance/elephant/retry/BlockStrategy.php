@@ -28,12 +28,12 @@ namespace tagadvance\elephant\retry;
  */
 interface BlockStrategy
 {
-	/**
-	 * Attempt to block for the designated amount of time. Implementations that don't block or otherwise delay the
-	 * processing from within this method for the given sleep duration can significantly modify the behavior of any
-	 * configured `WaitStrategy`. Caution is advised when generating your own implementations.
-	 *
-	 * @param float $sleepSeconds the computed sleep duration in seconds
-	 */
-	public function block(float $sleepSeconds): void;
+    /**
+     * Attempt to block for the designated amount of time. Implementations that don't block or otherwise delay the
+     * processing from within this method for the given sleep duration can significantly modify the behavior of any
+     * configured `WaitStrategy`. Caution is advised when generating your own implementations.
+     *
+     * @param float $sleepSeconds the computed sleep duration in seconds
+     */
+    public function block(float $sleepSeconds): void;
 }

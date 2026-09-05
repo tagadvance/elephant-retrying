@@ -28,33 +28,31 @@ namespace tagadvance\elephant\retry;
  */
 final class BlockStrategies
 {
-	private function __construct()
-	{
-	}
+    private function __construct() {}
 
-	/**
-	 * Returns a block strategy that puts the current thread to sleep between retries.
-	 *
-	 * @return BlockStrategy a block strategy that puts the current thread to sleep between retries
-	 */
-	public static function sleepStrategy(): BlockStrategy
-	{
-		static $sleepStrategy = null;
-		if ($sleepStrategy === null) {
-			$sleepStrategy = new SleepStrategy();
-		}
+    /**
+     * Returns a block strategy that puts the current thread to sleep between retries.
+     *
+     * @return BlockStrategy a block strategy that puts the current thread to sleep between retries
+     */
+    public static function sleepStrategy(): BlockStrategy
+    {
+        static $sleepStrategy = null;
+        if ($sleepStrategy === null) {
+            $sleepStrategy = new SleepStrategy();
+        }
 
-		return $sleepStrategy;
-	}
+        return $sleepStrategy;
+    }
 }
 
 final class SleepStrategy implements BlockStrategy
 {
-	const MICROSECONDS_PER_SECOND = 1000000.0;
+    public const MICROSECONDS_PER_SECOND = 1000000.0;
 
-	public function block(float $sleepSeconds): void
-	{
-		$microseconds = intval($sleepSeconds * self::MICROSECONDS_PER_SECOND);
-		usleep($microseconds);
-	}
+    public function block(float $sleepSeconds): void
+    {
+        $microseconds = intval($sleepSeconds * self::MICROSECONDS_PER_SECOND);
+        usleep($microseconds);
+    }
 }

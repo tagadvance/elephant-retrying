@@ -30,44 +30,43 @@ namespace tagadvance\elephant\retry;
  */
 final class RetryException extends \Exception
 {
+    private int $numberOfFailedAttempts;
+    private Attempt $lastFailedAttempt;
 
-	private int $numberOfFailedAttempts;
-	private Attempt $lastFailedAttempt;
+    /**
+     * If the last `Attempt` had an Exception, ensure it is available in the stack trace.
+     *
+     * @param string $message Exception description to be added to the stack trace
+     * @param int $numberOfFailedAttempts times we've tried and failed
+     * @param Attempt $lastFailedAttempt what happened the last time we failed
+     */
+    public function __construct(?string $message, int $numberOfFailedAttempts, Attempt $lastFailedAttempt)
+    {
+        $message = $message ?? "Retrying failed to complete successfully after $numberOfFailedAttempts attempts.";
+        $code = 0;
+        parent::__construct($message, $code, $lastFailedAttempt->getExceptionCause());
 
-	/**
-	 * If the last `Attempt` had an Exception, ensure it is available in the stack trace.
-	 *
-	 * @param string $message Exception description to be added to the stack trace
-	 * @param int $numberOfFailedAttempts times we've tried and failed
-	 * @param Attempt $lastFailedAttempt what happened the last time we failed
-	 */
-	public function __construct(?string $message, int $numberOfFailedAttempts, Attempt $lastFailedAttempt)
-	{
-		$message = $message ?? "Retrying failed to complete successfully after $numberOfFailedAttempts attempts.";
-		$code = 0;
-		parent::__construct($message, $code, $lastFailedAttempt->getExceptionCause());
+        $this->numberOfFailedAttempts = $numberOfFailedAttempts;
+        $this->lastFailedAttempt = $lastFailedAttempt;
+    }
 
-		$this->numberOfFailedAttempts = $numberOfFailedAttempts;
-		$this->lastFailedAttempt = $lastFailedAttempt;
-	}
+    /**
+     * Returns the number of failed attempts
+     *
+     * @return int the number of failed attempts
+     */
+    public function getNumberOfFailedAttempts(): int
+    {
+        return $this->numberOfFailedAttempts;
+    }
 
-	/**
-	 * Returns the number of failed attempts
-	 *
-	 * @return int the number of failed attempts
-	 */
-	public function getNumberOfFailedAttempts(): int
-	{
-		return $this->numberOfFailedAttempts;
-	}
-
-	/**
-	 * Returns the last failed attempt
-	 *
-	 * @return Attempt the last failed attempt
-	 */
-	public function getLastFailedAttempt(): Attempt
-	{
-		return $this->lastFailedAttempt;
-	}
+    /**
+     * Returns the last failed attempt
+     *
+     * @return Attempt the last failed attempt
+     */
+    public function getLastFailedAttempt(): Attempt
+    {
+        return $this->lastFailedAttempt;
+    }
 }

@@ -22,18 +22,18 @@ namespace tagadvance\elephant\retry;
 
 class Utilities
 {
-	public static function isThrowable(string $class)
-	{
-		if ($class === \Throwable::class) {
-			return true;
-		}
+    public static function isThrowable(string $class)
+    {
+        if ($class === \Throwable::class) {
+            return true;
+        }
 
-		if (class_exists($class)) {
-			$interfaces = class_implements($class);
+        if (class_exists($class)) {
+            $interfaces = class_implements($class);
 
-			return in_array(\Throwable::class, $interfaces);
-		}
+            return in_array(\Throwable::class, $interfaces);
+        }
 
-		return false;
-	}
+        return false;
+    }
 }

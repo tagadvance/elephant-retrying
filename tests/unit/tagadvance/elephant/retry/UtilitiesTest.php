@@ -6,31 +6,31 @@ use PHPUnit\Framework\TestCase;
 
 class UtilitiesTest extends TestCase
 {
-	function testIsThrowableWithFoo()
-	{
-		$isThrowable = Utilities::isThrowable('Foo');
+    public function testIsThrowableWithFoo()
+    {
+        $isThrowable = Utilities::isThrowable('Foo');
 
-		$this->assertFalse($isThrowable);
-	}
+        $this->assertFalse($isThrowable);
+    }
 
-	function testIsThrowableWithInvalidClass()
-	{
-		$isThrowable = Utilities::isThrowable(Utilities::class);
+    public function testIsThrowableWithInvalidClass()
+    {
+        $isThrowable = Utilities::isThrowable(Utilities::class);
 
-		$this->assertFalse($isThrowable);
-	}
+        $this->assertFalse($isThrowable);
+    }
 
-	function testIsThrowableWithThrowable()
-	{
-		$isThrowable = Utilities::isThrowable(\Throwable::class);
+    public function testIsThrowableWithThrowable()
+    {
+        $isThrowable = Utilities::isThrowable(\Throwable::class);
 
-		$this->assertTrue($isThrowable);
-	}
+        $this->assertTrue($isThrowable);
+    }
 
-	function testIsThrowableWithException()
-	{
-		$isThrowable = Utilities::isThrowable(\Exception::class);
+    public function testIsThrowableWithException()
+    {
+        $isThrowable = Utilities::isThrowable(\Exception::class);
 
-		$this->assertTrue($isThrowable);
-	}
+        $this->assertTrue($isThrowable);
+    }
 }

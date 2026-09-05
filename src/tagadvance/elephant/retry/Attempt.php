@@ -26,56 +26,55 @@ namespace tagadvance\elephant\retry;
  */
 interface Attempt
 {
+    /**
+     * Returns the result of the attempt, if any.
+     *
+     * @return mixed the result of the attempt
+     * @throws ExecutionException if an exception was thrown by the attempt. The thrown exception is set as the cause of the ExecutionException
+     */
+    public function get();
 
-	/**
-	 * Returns the result of the attempt, if any.
-	 *
-	 * @return mixed the result of the attempt
-	 * @throws ExecutionException if an exception was thrown by the attempt. The thrown exception is set as the cause of the ExecutionException
-	 */
-	public function get();
+    /**
+     * Tells if the call returned a result or not
+     *
+     * @return bool <code>true</code> if the call returned a result, <code>false</code> if it threw an exception
+     */
+    public function hasResult(): bool;
 
-	/**
-	 * Tells if the call returned a result or not
-	 *
-	 * @return bool <code>true</code> if the call returned a result, <code>false</code> if it threw an exception
-	 */
-	public function hasResult(): bool;
+    /**
+     * Tells if the call threw an exception or not
+     *
+     * @return bool <code>true</code> if the call threw an exception, <code>false</code> if it returned a result
+     */
+    public function hasException(): bool;
 
-	/**
-	 * Tells if the call threw an exception or not
-	 *
-	 * @return bool <code>true</code> if the call threw an exception, <code>false</code> if it returned a result
-	 */
-	public function hasException(): bool;
+    /**
+     * Gets the result of the call
+     *
+     * @return mixed the result of the call
+     * @throws IllegalStateException if the call didn't return a result, but threw an exception, as indicated by {@link #hasResult()}
+     */
+    public function getResult();
 
-	/**
-	 * Gets the result of the call
-	 *
-	 * @return mixed the result of the call
-	 * @throws IllegalStateException if the call didn't return a result, but threw an exception, as indicated by {@link #hasResult()}
-	 */
-	public function getResult();
+    /**
+     * Gets the exception thrown by the call
+     *
+     * @return \Throwable the exception thrown by the call
+     * @throws IllegalStateException if the call didn't throw an exception, as indicated by {@link #hasException()}
+     */
+    public function getExceptionCause(): \Throwable;
 
-	/**
-	 * Gets the exception thrown by the call
-	 *
-	 * @return \Throwable the exception thrown by the call
-	 * @throws IllegalStateException if the call didn't throw an exception, as indicated by {@link #hasException()}
-	 */
-	public function getExceptionCause(): \Throwable;
+    /**
+     * The number, starting from 1, of this attempt.
+     *
+     * @return int the attempt number
+     */
+    public function getAttemptNumber(): int;
 
-	/**
-	 * The number, starting from 1, of this attempt.
-	 *
-	 * @return int the attempt number
-	 */
-	public function getAttemptNumber(): int;
-
-	/**
-	 * The delay since the start of the first attempt, in seconds.
-	 *
-	 * @return float the delay since the start of the first attempt, in seconds
-	 */
-	public function getDelaySinceFirstAttempt(): float;
+    /**
+     * The delay since the start of the first attempt, in seconds.
+     *
+     * @return float the delay since the start of the first attempt, in seconds
+     */
+    public function getDelaySinceFirstAttempt(): float;
 }
