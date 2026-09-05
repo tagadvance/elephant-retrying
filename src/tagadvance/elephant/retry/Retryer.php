@@ -39,7 +39,10 @@ final class Retryer
     private $rejectionPredicate;
 
     /**
-     * @var list<RetryListener>
+     * Not a list: spreading a string-keyed array into the variadic constructor keeps those
+     * keys.
+     *
+     * @var array<array-key, RetryListener>
      */
     private array $listeners;
 
@@ -166,11 +169,13 @@ class ResultAttempt implements Attempt
 final class ExceptionAttempt implements Attempt
 {
     private ExecutionException $e;
+    private \Throwable $cause;
     private int $attemptNumber;
     private float $delaySinceFirstAttempt;
 
     public function __construct(\Throwable $cause, int $attemptNumber, float $delaySinceFirstAttempt)
     {
+        $this->cause = $cause;
         $this->e = new ExecutionException('', 0, $cause);
         $this->attemptNumber = $attemptNumber;
         $this->delaySinceFirstAttempt = $delaySinceFirstAttempt;
@@ -198,7 +203,7 @@ final class ExceptionAttempt implements Attempt
 
     public function getExceptionCause(): \Throwable
     {
-        return $this->e->getPrevious();
+        return $this->cause;
     }
 
     public function getAttemptNumber(): int
