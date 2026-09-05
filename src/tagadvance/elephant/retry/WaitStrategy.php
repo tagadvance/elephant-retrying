@@ -29,7 +29,7 @@ interface WaitStrategy
     /**
      * Returns the time, in seconds, to sleep before retrying.
      *
-     * @param Attempt failedAttempt the previous failed `Attempt`
+     * @param Attempt $failedAttempt the previous failed `Attempt`
      * @return float the sleep time before next attempt
      */
     public function computeSleepTime(Attempt $failedAttempt): float;

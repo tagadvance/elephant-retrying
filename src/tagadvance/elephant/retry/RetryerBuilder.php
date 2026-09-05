@@ -55,7 +55,7 @@ class RetryerBuilder
     /**
      * Adds a listener that will be notified of each attempt that is made
      *
-     * @param RetryListener listener Listener to add
+     * @param RetryListener $listener Listener to add
      * @return self <code>this</code>
      */
     public function withRetryListener(RetryListener $listener): self
@@ -125,7 +125,7 @@ class RetryerBuilder
      * Configures the retryer to retry if an exception of the given class (or subclass of the given class) is thrown by
      * the call.
      *
-     * @param string exceptionClass the type of the exception which should cause the retryer to retry
+     * @param string $exceptionClass the type of the exception which should cause the retryer to retry
      * @return self <code>this</code>
      */
     public function retryIfExceptionOfType(string $exceptionClass): self

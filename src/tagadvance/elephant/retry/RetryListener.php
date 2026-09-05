@@ -32,7 +32,7 @@ interface RetryListener
      * This method with fire no matter what the result is and before the rejection predicate and stop strategies are
      * applied.
      *
-     * @param Attempt attempt the current `Attempt`
+     * @param Attempt $attempt the current `Attempt`
      */
     public function onRetry(Attempt $attempt): void;
 }

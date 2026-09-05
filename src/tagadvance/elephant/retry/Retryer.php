@@ -69,7 +69,7 @@ final class Retryer
      * if a new attempt must be made. Then the wait strategy is used to decide how much time to sleep and a new attempt
      * is made.
      *
-     * @param callable the callable task to be executed
+     * @param callable $callable the callable task to be executed
      * @return mixed the computed result of the given callable
      * @throws ExecutionException if the given callable throws an exception, and the rejection predicate considers the
      * attempt as successful. The original exception is wrapped into an ExecutionException.
@@ -109,7 +109,7 @@ final class Retryer
     /**
      * TODO: documentation
      *
-     * @param callable the callable to wrap
+     * @param callable $callable the callable to wrap
      * @return callable a callable that behaves like the given `$callable` with retry behavior defined by this `Retryer`
      */
     public function wrap(callable $callable): callable
