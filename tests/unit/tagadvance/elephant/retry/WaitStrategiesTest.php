@@ -91,10 +91,9 @@ class WaitStrategiesTest extends TestCase
 
     public function testIncrementingWait()
     {
-        $attempt = \Mockery::mock(Attempt::class)
-            ->shouldReceive('getAttemptNumber')
-            ->andReturnValues([1, 2, 3, 4, 5])
-            ->getMock();
+        $attempt = \Mockery::mock(Attempt::class);
+        $attempt->shouldReceive('getAttemptNumber')
+            ->andReturnValues([1, 2, 3, 4, 5]);
 
         $waitStrategy = WaitStrategies::incrementingWait(1, 2);
 
@@ -133,10 +132,9 @@ class WaitStrategiesTest extends TestCase
 
     public function testExponentialWait()
     {
-        $attempt = \Mockery::mock(Attempt::class)
-            ->shouldReceive('getAttemptNumber')
-            ->andReturnValues([1, 2, 3, 4, 5])
-            ->getMock();
+        $attempt = \Mockery::mock(Attempt::class);
+        $attempt->shouldReceive('getAttemptNumber')
+            ->andReturnValues([1, 2, 3, 4, 5]);
 
         $waitStrategy = WaitStrategies::exponentialWait();
 
@@ -175,10 +173,9 @@ class WaitStrategiesTest extends TestCase
 
     public function testFibonacciWait()
     {
-        $attempt = \Mockery::mock(Attempt::class)
-            ->shouldReceive('getAttemptNumber')
-            ->andReturnValues([1, 2, 3, 4, 5])
-            ->getMock();
+        $attempt = \Mockery::mock(Attempt::class);
+        $attempt->shouldReceive('getAttemptNumber')
+            ->andReturnValues([1, 2, 3, 4, 5]);
 
         $waitStrategy = WaitStrategies::fibonacciWait();
 
@@ -240,15 +237,13 @@ class WaitStrategiesTest extends TestCase
     {
         $expected = 3;
 
-        $waitStrategy1 = \Mockery::mock(WaitStrategy::class)
-            ->shouldReceive('computeSleepTime')
-            ->andReturn(1)
-            ->getMock();
+        $waitStrategy1 = \Mockery::mock(WaitStrategy::class);
+        $waitStrategy1->shouldReceive('computeSleepTime')
+            ->andReturn(1);
 
-        $waitStrategy2 = \Mockery::mock(WaitStrategy::class)
-            ->shouldReceive('computeSleepTime')
-            ->andReturn(2)
-            ->getMock();
+        $waitStrategy2 = \Mockery::mock(WaitStrategy::class);
+        $waitStrategy2->shouldReceive('computeSleepTime')
+            ->andReturn(2);
 
         $attempt = \Mockery::mock(Attempt::class);
 

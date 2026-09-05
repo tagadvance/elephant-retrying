@@ -16,25 +16,23 @@ class IntegrationTest extends TestCase
         $attempts = 3;
         $range = range(1, $attempts);
 
-        $waitStrategy = \Mockery::mock(WaitStrategy::class)
-            ->shouldReceive('computeSleepTime')->andReturnValues($range)
-            ->getMock();
+        $waitStrategy = \Mockery::mock(WaitStrategy::class);
+        $waitStrategy->shouldReceive('computeSleepTime')->andReturnValues($range);
 
         $blockStrategy = \Mockery::mock(BlockStrategy::class);
         $blockStrategy->shouldReceive('block')->with(1);
         $blockStrategy->shouldReceive('block')->with(2);
 
-        $retryListener = \Mockery::mock(RetryListener::class)
-            ->shouldReceive('onRetry')->with(
-                \Mockery::on(function (Attempt $attempt) use (&$range) {
-                    $expected = array_shift($range);
-                    $actual = $attempt->getAttemptNumber();
-                    $this->assertEquals($expected, $actual);
+        $retryListener = \Mockery::mock(RetryListener::class);
+        $retryListener->shouldReceive('onRetry')->with(
+            \Mockery::on(function (Attempt $attempt) use (&$range) {
+                $expected = array_shift($range);
+                $actual = $attempt->getAttemptNumber();
+                $this->assertEquals($expected, $actual);
 
-                    return true;
-                }),
-            )
-            ->getMock();
+                return true;
+            }),
+        );
 
         $generator = (function () {
             yield 'foo';

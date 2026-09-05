@@ -28,9 +28,8 @@ class StopStrategiesTest extends TestCase
         $maxAttempts = 3;
 
         $strategy = StopStrategies::stopAfterAttempt(3);
-        $attempt = \Mockery::mock(Attempt::class)
-            ->shouldReceive('getAttemptNumber')->andReturnValues([1, 2, 3])
-            ->getMock();
+        $attempt = \Mockery::mock(Attempt::class);
+        $attempt->shouldReceive('getAttemptNumber')->andReturnValues([1, 2, 3]);
 
         for ($i = 1; $i <= $maxAttempts; $i++) {
             $shouldStop = $strategy->shouldStop($attempt);
@@ -50,9 +49,8 @@ class StopStrategiesTest extends TestCase
     public function testStopAfterDelayZero()
     {
         $strategy = StopStrategies::stopAfterDelay(0);
-        $attempt = \Mockery::mock(Attempt::class)
-            ->shouldReceive('getDelaySinceFirstAttempt')->andReturn(0)
-            ->getMock();
+        $attempt = \Mockery::mock(Attempt::class);
+        $attempt->shouldReceive('getDelaySinceFirstAttempt')->andReturn(0);
 
         $shouldStop = $strategy->shouldStop($attempt);
         $this->assertTrue($shouldStop);
@@ -61,9 +59,8 @@ class StopStrategiesTest extends TestCase
     public function testStopAfterDelayOne()
     {
         $strategy = StopStrategies::stopAfterDelay(1);
-        $attempt = \Mockery::mock(Attempt::class)
-            ->shouldReceive('getDelaySinceFirstAttempt')->andReturnValues([0, 1])
-            ->getMock();
+        $attempt = \Mockery::mock(Attempt::class);
+        $attempt->shouldReceive('getDelaySinceFirstAttempt')->andReturnValues([0, 1]);
 
         $shouldStop = $strategy->shouldStop($attempt);
         $this->assertFalse($shouldStop);
