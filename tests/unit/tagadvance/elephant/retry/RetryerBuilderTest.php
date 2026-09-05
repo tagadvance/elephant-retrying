@@ -8,17 +8,17 @@ class RetryerBuilderTest extends TestCase
 {
     public function testNewBuilder()
     {
-        RetryerBuilder::newBuilder();
+        $builder = RetryerBuilder::newBuilder();
 
-        $this->assertTrue(true);
+        $this->assertInstanceOf(RetryerBuilder::class, $builder);
     }
 
     public function testWithRetryListener()
     {
         $listener = \Mockery::mock(RetryListener::class);
-        RetryerBuilder::newBuilder()->withRetryListener($listener);
+        $builder = RetryerBuilder::newBuilder();
 
-        $this->assertTrue(true);
+        $this->assertSame($builder, $builder->withRetryListener($listener));
     }
 
     public function testWithWaitStrategyValidation()
@@ -58,22 +58,22 @@ class RetryerBuilderTest extends TestCase
 
     public function testRetryIfExceptionOfType()
     {
-        RetryerBuilder::newBuilder()->retryIfExceptionOfType(\Throwable::class);
+        $builder = RetryerBuilder::newBuilder();
 
-        $this->assertTrue(true);
+        $this->assertSame($builder, $builder->retryIfExceptionOfType(\Throwable::class));
     }
 
     public function testRetryIfException()
     {
-        RetryerBuilder::newBuilder()->retryIfException(fn(\Throwable $t) => true);
+        $builder = RetryerBuilder::newBuilder();
 
-        $this->assertTrue(true);
+        $this->assertSame($builder, $builder->retryIfException(fn(\Throwable $t) => true));
     }
 
     public function testRetryIfResult()
     {
-        RetryerBuilder::newBuilder()->retryIfResult(fn($result) => true);
+        $builder = RetryerBuilder::newBuilder();
 
-        $this->assertTrue(true);
+        $this->assertSame($builder, $builder->retryIfResult(fn($result) => true));
     }
 }
