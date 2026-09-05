@@ -1,6 +1,7 @@
-[![Build Status](https://travis-ci.org/tagadvance/elephant-retrying.svg?branch=master)](https://travis-ci.org/tagadvance/elephant-retrying)
-[![Coverage Status](https://coveralls.io/repos/github/tagadvance/elephant-retrying/badge.svg?branch=master)](https://coveralls.io/github/tagadvance/elephant-retrying?branch=master)
-[![License](http://img.shields.io/badge/license-apache%202-brightgreen.svg)](https://github.com/tagadvance/elephant-retrying/blob/master/LICENSE)
+[![CI](https://github.com/tagadvance/elephant-retrying/actions/workflows/ci.yml/badge.svg)](https://github.com/tagadvance/elephant-retrying/actions/workflows/ci.yml)
+[![Packagist](https://img.shields.io/packagist/v/tagadvance/elephant-retrying.svg)](https://packagist.org/packages/tagadvance/elephant-retrying)
+[![PHP](https://img.shields.io/badge/php-%3E%3D8.4-777bb4.svg)](https://www.php.net/)
+[![License: Apache 2.0](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
 
 ## What is this?
 The elephant-retrying module provides a general purpose method for retrying arbitrary PHP code with specific stop, retry, and exception handling capabilities.
