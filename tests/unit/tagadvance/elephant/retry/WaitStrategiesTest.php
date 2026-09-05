@@ -237,7 +237,7 @@ class WaitStrategiesTest extends TestCase
 	function testJoinValidation()
 	{
 		$this->expectException(\InvalidArgumentException::class);
-		$this->expectExceptionMessage('{ } must not be empty');
+		$this->expectExceptionMessage('$waitStrategies must not be empty');
 
 		WaitStrategies::join();
 	}
