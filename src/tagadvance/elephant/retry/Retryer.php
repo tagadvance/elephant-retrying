@@ -98,7 +98,7 @@ final class Retryer
             }
 
             if ($this->stopStrategy->shouldStop($attempt)) {
-                throw new RetryException($attemptNumber, $attempt);
+                throw new RetryException(null, $attemptNumber, $attempt);
             }
 
             $sleepTime = $this->waitStrategy->computeSleepTime($attempt);

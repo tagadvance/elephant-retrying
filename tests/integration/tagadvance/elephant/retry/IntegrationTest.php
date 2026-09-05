@@ -114,4 +114,26 @@ class IntegrationTest extends TestCase
             throw $e->getPrevious();
         }
     }
+
+    public function testStopAfterAttemptThrowsRetryExceptionWhenAttemptFailedWithException()
+    {
+        $cause = new \RuntimeException('boom');
+        $callable = function () use ($cause) {
+            throw $cause;
+        };
+
+        $retryer = RetryerBuilder::newBuilder()
+            ->retryIfExceptionOfType(\RuntimeException::class)
+            ->withStopStrategy(StopStrategies::stopAfterAttempt(2))
+            ->build();
+
+        try {
+            $retryer->call($callable);
+            $this->fail('expected a ' . RetryException::class);
+        } catch (RetryException $e) {
+            $this->assertEquals(2, $e->getNumberOfFailedAttempts());
+            $this->assertSame($cause, $e->getPrevious());
+            $this->assertSame($cause, $e->getLastFailedAttempt()->getExceptionCause());
+        }
+    }
 }
