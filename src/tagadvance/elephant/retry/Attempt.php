@@ -31,7 +31,7 @@ interface Attempt
      *
      * @throws ExecutionException if the call threw; the original throwable is the wrapped cause
      */
-    public function get();
+    public function get(): mixed;
 
     public function hasResult(): bool;
 
@@ -42,7 +42,7 @@ interface Attempt
      *
      * @throws IllegalStateException if the call threw rather than returning, as `hasException()` reports
      */
-    public function getResult();
+    public function getResult(): mixed;
 
     /**
      * The throwable the call raised, unwrapped.

@@ -61,7 +61,7 @@ final class Retryer
      * wrapped cause
      * @throws RetryException if the stop strategy gave up, carrying the last failed attempt
      */
-    public function call(callable $callable)
+    public function call(callable $callable): mixed
     {
         $startTime = microtime(true);
 
@@ -116,7 +116,7 @@ class ResultAttempt implements Attempt
         $this->delaySinceFirstAttempt = $delaySinceFirstAttempt;
     }
 
-    public function get()
+    public function get(): mixed
     {
         return $this->result;
     }
@@ -131,7 +131,7 @@ class ResultAttempt implements Attempt
         return false;
     }
 
-    public function getResult()
+    public function getResult(): mixed
     {
         return $this->result;
     }
@@ -168,7 +168,7 @@ final class ExceptionAttempt implements Attempt
         $this->delaySinceFirstAttempt = $delaySinceFirstAttempt;
     }
 
-    public function get()
+    public function get(): mixed
     {
         throw $this->e;
     }
@@ -183,7 +183,7 @@ final class ExceptionAttempt implements Attempt
         return true;
     }
 
-    public function getResult()
+    public function getResult(): mixed
     {
         throw new IllegalStateException('The attempt resulted in an exception, not in a result');
     }
