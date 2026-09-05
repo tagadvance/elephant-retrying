@@ -10,7 +10,7 @@ class RetryExceptionTest extends TestCase
     {
         $expected = 'This is a message';
 
-        $exception = new RetryException($expected, 0, self::createAttempt());
+        $exception = new RetryException($expected, 0, $this->createAttempt());
 
         $actual = $exception->getMessage();
 
@@ -21,18 +21,18 @@ class RetryExceptionTest extends TestCase
     {
         $expected = 'Retrying failed to complete successfully after 0 attempts.';
 
-        $exception = new RetryException(null, 0, self::createAttempt());
+        $exception = new RetryException(null, 0, $this->createAttempt());
 
         $actual = $exception->getMessage();
 
         $this->assertEquals($expected, $actual);
     }
 
-    private static function createAttempt(): Attempt
+    private function createAttempt(): Attempt
     {
-        $attempt = \Mockery::mock(Attempt::class);
-        $attempt->shouldReceive('hasException')->andReturn(true);
-        $attempt->shouldReceive('getExceptionCause')->andReturn(new \Exception());
+        $attempt = $this->createStub(Attempt::class);
+        $attempt->method('hasException')->willReturn(true);
+        $attempt->method('getExceptionCause')->willReturn(new \Exception());
 
         return $attempt;
     }
