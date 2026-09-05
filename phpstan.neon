@@ -1,0 +1,8 @@
+parameters:
+  # Level 5 reports 26 errors, all of them Mockery::mock() returning
+  # MockInterface where the subject expects the mocked interface. That is the
+  # next ratchet, and it clears once the tests move to PHPUnit test doubles.
+  level: 4
+  paths:
+    - src
+    - tests
