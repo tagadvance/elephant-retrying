@@ -26,7 +26,7 @@ A minimal sample of some of the functionality would look like:
 $retryer = RetryerBuilder::newBuilder()
 	->retryIfResult('is_null')
 	->retryIfExceptionOfType(\RuntimeException::class)
-	->withStopStrategy(StopStrategies . stopAfterAttempt(3))
+	->withStopStrategy(StopStrategies::stopAfterAttempt(3))
 	->build();
 try {
 	$retryer->call(fn() => true); // do something useful here
@@ -92,7 +92,7 @@ Inspiration for this implementation came from [Efficient retry/backoff mechanism
 `git clone git@github.com:tagadvance/elephant-retrying.git`
 
 ### Clean, Install, and Test
-`./make`
+`make`
 
 ## License
 The guava-retrying module is released under version 2.0 of the
